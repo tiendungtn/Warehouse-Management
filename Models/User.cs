@@ -12,7 +12,7 @@ namespace QuanLyKho.Models
         [Required]
         public string Password { get; set; } = string.Empty;
         [Required]
-        public string FullName { get; set; } = string.Empty;
+        public string Fullname { get; set; } = string.Empty;
 
         // Các quyền của người dùng, ví dụ: "Admin", "Staff", "Manager"
         [Required, MaxLength(20)]

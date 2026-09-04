@@ -9,7 +9,7 @@ namespace QuanLyKho.Models
 
         [Required, MaxLength(100)]
         [Display(Name = "Tên danh mục")]
-        public string Name { get; set; } = string.Empty;
+        public string CategoryName { get; set; } = string.Empty;
 
         [MaxLength(250)]
         [Display(Name = "Mô tả")]
