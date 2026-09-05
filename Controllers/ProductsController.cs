@@ -34,7 +34,7 @@ namespace QuanLyKho.Controllers
             return View(await query.ToListAsync());
         }
 
-        // 
+        // Thêm mới hàng hoá, sản phẩm
         // GET: Products/Create
         [HttpGet]
         [Authorize(Roles = "Admin, Manager")]
@@ -66,6 +66,7 @@ namespace QuanLyKho.Controllers
             return View(product);
         }
 
+        // Chỉnh sửa thông tin hàng hoá, sản phẩm
         // GET: Products/Edit
         [HttpGet]
         [Authorize(Roles = "Admin, Manager")]
@@ -132,6 +133,7 @@ namespace QuanLyKho.Controllers
             return View(product);
         }
 
+        // Xóa hàng hoá, sản phẩm
         // GET: Products/Delete
         [HttpGet]
         [Authorize(Roles = "Admin")]
