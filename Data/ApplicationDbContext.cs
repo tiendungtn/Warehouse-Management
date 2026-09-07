@@ -31,7 +31,7 @@ namespace QuanLyKho.Data
 
 
             modelBuilder.Entity<Receipt>()
-                .HasOne(r => r.CreatedTor)
+                .HasOne(r => r.Creator)
                 .WithMany(r => r.Receipts)
                 .HasForeignKey(rd => rd.CreatedBy)
                 .OnDelete(DeleteBehavior.Restrict);

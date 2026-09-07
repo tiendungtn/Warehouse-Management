@@ -22,7 +22,7 @@ namespace QuanLyKho.Models
         public int CreatedBy { get; set; }
 
         [ForeignKey(nameof(CreatedBy))]
-        public virtual User? CreatedTor { get; set; }
+        public virtual User? Creator { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
