@@ -13,7 +13,7 @@ namespace QuanLyKho.Data
         public DbSet<User> Users => Set<User>();
         public DbSet<Product> Products => Set<Product>();
         public DbSet<Category> Categories => Set<Category>();
-        public DbSet<Receipt> Inventories => Set<Receipt>();
+        public DbSet<Receipt> Receipts => Set<Receipt>();
         public DbSet<ReceiptDetail> ReceiptDetails => Set<ReceiptDetail>();
         public DbSet<Issue> Issues => Set<Issue>();
         public DbSet<IssueDetail> IssueDetails => Set<IssueDetail>();
