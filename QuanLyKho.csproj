@@ -17,9 +17,4 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="10.*" />
     <PackageReference Include="QuestPDF" Version="2026.8.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None/>
-  </ItemGroup>
-
 </Project>
