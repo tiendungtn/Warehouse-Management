@@ -105,5 +105,49 @@ namespace QuanLyKho.Controllers
             ViewBag.Products = _context.Products.AsNoTracking().ToList();
             return View(model);
         }
+
+        // POST: Receipt/Approve/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> Approve(int id)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var receipt = await _context.Receipts
+                    .Include(r => r.ReceiptDetails)
+                    .FirstOrDefaultAsync(r => r.Id == id);
+
+                if (receipt == null) return NotFound();
+
+                if (receipt.Status != "Pending")
+                {
+                    TempData["Error"] = "Phiếu này đã được xử lý trước đó.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                foreach (var detail in receipt.ReceiptDetails)
+                {
+                    var product = await _context.Products.FindAsync(detail.ProductId);
+                    if (product != null)
+                    {
+                        product.StockQuantity += detail.Quantity;
+                    }
+                }
+                receipt.Status = "Approved";
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                TempData["Success"] = $"Đã duyệt phiếu {receipt.ReceiptCode}, số lượng hàng tồn đã được cập nhật.";
+
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                TempData["Error"] = "Xảy ra lỗi khi duyệt phiếu: " + ex.Message;
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
