@@ -22,9 +22,11 @@ namespace QuanLyKho.Models
         public int CreatedBy { get; set; }
 
         [ForeignKey(nameof(CreatedBy))]
+        [Display(Name = "Người lập phiếu")]
         public virtual User? Creator { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [Display(Name = "Ngày lập phiếu")]
+        public DateTime ReceiptDate { get; set; } = DateTime.UtcNow;
 
         [Required, MaxLength(30)]
         [Display(Name = "Trạng thái")]

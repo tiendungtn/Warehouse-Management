@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyKho.Models
 {
@@ -16,8 +17,11 @@ namespace QuanLyKho.Models
         public string Reason { get; set; } = string.Empty;
 
         [Required]
+        [Display(Name = "Nhân viên lập")]
         public int CreatedBy { get; set; }
 
+        [ForeignKey(nameof(CreatedBy))]
+        [Display(Name = "Người lập phiếu")]
         public virtual User? Creator { get; set; }
 
         public DateTime IssueDate { get; set; } = DateTime.UtcNow;
