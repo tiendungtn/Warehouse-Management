@@ -1,0 +1,1 @@
+using System.ComponentModel.DataAnnotations;namespace QuanLyKho.DTOs;public sealed record CategoryDto(int Id,string CategoryName,string? Description,int ProductCount);public sealed class CategoryRequest{[Required,MaxLength(100)]public string CategoryName{get;set;}="";[MaxLength(250)]public string? Description{get;set;}}
