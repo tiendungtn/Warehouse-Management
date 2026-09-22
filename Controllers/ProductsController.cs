@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using QuanLyKho.DTOs;
 using QuanLyKho.Services;
 
-namespace QuanLyKho.Controllers
+namespace QuanLyKho.Controllers;
+
 [ApiController]
 [Route("api/products")]
 [Authorize]
