@@ -11,7 +11,7 @@ namespace QuanLyKho.Models
         [Required]
         public int ReceiptId { get; set; }
 
-        [ForeignKey(nameof(ReceiptDetail.Id))]
+        [ForeignKey(nameof(ReceiptId))]
         public virtual Receipt? Receipt { get; set; }
 
         [Required]
