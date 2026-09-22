@@ -1,0 +1,60 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace QuanLyKho.DTOs;
+
+public sealed record IssueDetailDto(
+    int ProductId,
+    string ProductCode,
+    string ProductName,
+    string Unit,
+    int Quantity,
+    decimal UnitPrice,
+    decimal TotalAmount);
+
+public sealed record IssueListDto(
+    int Id,
+    string IssueCode,
+    string Reason,
+    int CreatedBy,
+    string CreatorName,
+    DateTime IssueDate,
+    string Status,
+    bool HasInvoice);
+
+public sealed record IssueDto(
+    int Id,
+    string IssueCode,
+    string Reason,
+    int CreatedBy,
+    string CreatorName,
+    DateTime IssueDate,
+    string Status,
+    bool HasInvoice,
+    IReadOnlyList<IssueDetailDto> Items,
+    decimal TotalAmount);
+
+public sealed class IssueRequest
+{
+    [Required]
+    [MaxLength(255)]
+    public string Reason { get; set; } = "";
+
+    [MinLength(1)]
+    public List<IssueItemRequest> Items { get; set; } = [];
+}
+
+public sealed class IssueItemRequest
+{
+    [Range(1, int.MaxValue)]
+    public int ProductId { get; set; }
+
+    [Range(1, 1000000)]
+    public int Quantity { get; set; }
+}
+
+public sealed class ApproveIssueRequest
+{
+    [Required]
+    [MaxLength(150)]
+    public string CustomerName { get; set; } = "";
+}
