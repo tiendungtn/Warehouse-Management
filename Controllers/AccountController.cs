@@ -1,76 +1,39 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QuanLyKho.Data;
-using QuanLyKho.ViewModels;
+using QuanLyKho.DTOs;
+using QuanLyKho.Services;
 using System.Security.Claims;
-using Microsoft.EntityFrameworkCore;
 
-namespace QuanLyKho.Controllers
+namespace QuanLyKho.Controllers;
+[ApiController]
+[Route("api/auth")]
+public sealed class AccountController : ControllerBase
 {
-    public class AccountController : Controller
+    private readonly AuthService _service;
+
+    public AccountController(AuthService service)
     {
-        private readonly ApplicationDbContext _context;
+        _service = service;
+    }
 
-        public AccountController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    [AllowAnonymous]
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(
+        LoginRequest request)
+    {
+        return Ok(
+            await _service.LoginAsync(request));
+    }
 
-        // GET: /Account/Login
-        [HttpGet]
-        public IActionResult Login(string? returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        var userId = int.Parse(
+            User.FindFirstValue(
+                ClaimTypes.NameIdentifier)!);
 
-        // POST: /Account/Login
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
-        {
-            if (!ModelState.IsValid) return View(model);
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
-            {
-                ModelState.AddModelError(string.Empty, "Tài khoản hoặc mật khẩu không chính xác.");
-                return View(model);
-            }
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim("FullName", user.Fullname ?? user.Username),
-                new Claim(ClaimTypes.Role, user.Role)
-
-            };
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-            // Điều hướng về trang trước đó nếu có returnUrl hợp lệ, nếu không thì điều hướng về trang chủ
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Home");
-        }
-
-        //Post: /Account/Logout
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
-        }
-
-        // GET: /Account/AccessDenied
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
+        return Ok(
+            await _service.MeAsync(userId));
     }
 }
